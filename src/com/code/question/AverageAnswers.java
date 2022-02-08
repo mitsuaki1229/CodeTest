@@ -26,20 +26,18 @@ public class AverageAnswers {
         for (Answerer answerer : answerers) {
             List<Answer> normalizedAnswers = new ArrayList<>();
             for (Answer answer : answerer.getAnswers()) {
-                Integer normalizedAnswer;
-                try {
-                    normalizedAnswer = Integer.parseInt(answer.getAnswerContent());
-                } catch (Exception e) {
+                if (!answer.isAvailable()) {
                     continue;
                 }
-                if (normalizedAnswer > 100 || normalizedAnswer < 0) {
-                    continue;
-                }
-                normalizedAnswers.add(new Answer(answer.getId(), answer.getAnswerContent()));
+                normalizedAnswers.add(answer.normalized());
             }
             normalizedAnswerers.add(new Answerer(answerer.getId(), normalizedAnswers));
         }
 
+        average(questionsNum, normalizedAnswerers);
+    }
+
+    private static void average(int questionsNum, List<Answerer> normalizedAnswerers) {
         for (int q = 0; q < questionsNum; q++) {
             List<Answer> answers = new ArrayList<>();
             for (Answerer answerer : normalizedAnswerers) {
@@ -62,8 +60,8 @@ public class AverageAnswers {
 
 class Answerer {
 
-    private int id;
-    private List<Answer> answers;
+    private final int id;
+    private final List<Answer> answers;
 
     public Answerer(int id, List<Answer> answers) {
         this.id = id;
@@ -81,8 +79,8 @@ class Answerer {
 
 class Answer {
 
-    private int id;
-    private String answerContent;
+    private final int id;
+    private final String answerContent;
 
     public Answer(int id, String answerContent) {
         this.id = id;
@@ -95,5 +93,22 @@ class Answer {
 
     public String getAnswerContent() {
         return this.answerContent;
+    }
+
+    public boolean isAvailable() {
+        return normalized() != null;
+    }
+
+    public Answer normalized() {
+        int normalizedAnswer;
+        try {
+            normalizedAnswer = Integer.parseInt(getAnswerContent());
+        } catch (Exception e) {
+            return null;
+        }
+        if (normalizedAnswer > 100 || normalizedAnswer < 0) {
+            return null;
+        }
+        return this;
     }
 }
