@@ -25,9 +25,10 @@ public class PhoneController {
 class RegisterPhoneRequest {
 
     String imei; // IMEI
-    String modelCode; // 機種
+    String modelCode; // 機種コード
     String colour; // 色
     boolean isSIMLock; // SIMロック
+    String osVersion; // OSバージョン
     double purchasePrice; // 買取価格
     String note; // 備考
 }
