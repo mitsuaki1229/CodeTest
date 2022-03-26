@@ -1,5 +1,7 @@
 package com.code.question.mobile_phone.vo;
 
+import java.time.LocalDate;
+
 public class Phone {
 
     String imei; // IMEI
@@ -17,6 +19,7 @@ class Model {
     String Name; // 機種名
     Manufacturer manufacturer; // メーカー
     String capacity; // 容量
+    LocalDate releaseDate; // 発売日
 }
 
 class Manufacturer {
